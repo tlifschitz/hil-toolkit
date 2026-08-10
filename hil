@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Single entrypoint. Routes to <area>.sh.
+#
+#   ./hil doctor
+#   ./hil build | flash | reset | serial | rtt | gdb | scope | ppk ...
+d="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+area="${1:-}"; shift || true
+case "$area" in
+    build|flash|reset|serial|rtt|gdb|scope|ppk|doctor) exec "$d/$area.sh" "$@" ;;
+    *) echo "usage: hil {doctor|build|flash|reset|serial|rtt|gdb|scope|ppk} ..." >&2; exit 2 ;;
+esac

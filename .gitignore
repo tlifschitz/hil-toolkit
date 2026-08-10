@@ -1,0 +1,5 @@
+# Device-specific config + secrets, and runtime scratch — never commit.
+dut.env
+run/
+*.log
+__pycache__/
