@@ -533,6 +533,9 @@ def main():
     s.add_argument("secs", type=float, nargs="?", default=5.0)
     s.add_argument("--power", action="store_true",
                    help="raise the DUT rail for the duration of this session")
+    s = sub.add_parser("power", help="hold the DUT rail up without sampling")
+    s.add_argument("secs", type=float, nargs="?", default=0.0,
+                   help="hold for N seconds; 0 (default) = until Ctrl-C")
     s = sub.add_parser("measure")
     s.add_argument("secs", type=float)
     s.add_argument("-o", "--out")
@@ -569,11 +572,23 @@ def main():
             print(f"  {key}: {' '.join(vals)}")
         return
 
+    if args.cmd == "power":
+        args.power = True
     parser = SampleParser(meta, args.mv)
     ppk.prepare(args.mv, args.power)
     if args.power:
         print(f"DUT rail ON @ {args.mv} mV for this session (drops at exit)", file=sys.stderr)
-    if args.cmd == "avg":
+    stalled = False
+    if args.cmd == "power":
+        # the rail is session-scoped (see Ppk2): holding the port open is all it
+        # takes. No AVERAGE_START, so there is no stream to drain while idling.
+        end = time.monotonic() + args.secs if args.secs else None
+        try:
+            while end is None or time.monotonic() < end:
+                time.sleep(0.5)
+        except KeyboardInterrupt:
+            print("interrupted", file=sys.stderr)
+    elif args.cmd == "avg":
         stats, stalled = stream(ppk, parser, args.secs, None)
         print(stats.report(args.mv))
     elif args.cmd == "measure":

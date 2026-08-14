@@ -107,6 +107,7 @@ scope's configuration while you are using it. Talks straight to the kernel
 ### Power profiler — `ppk.sh` + `ppk2.py` (Nordic PPK2, source-meter mode)
 ```bash
 ./ppk.sh info                       # identity + calibration
+./ppk.sh power                      # rail up only (idle session, Ctrl-C drops it); `power 600` = timed
 ./ppk.sh avg 10                     # mean/min/max current over 10 s (+ mAh/day)
 ./ppk.sh measure 60 --avg 100 --power   # 60 s capture -> 1 kHz CSV (t_s,current_uA,logic)
 ./ppk.sh plot run/ppk-X.csv -o x.png    # offline envelope plot (headless)

@@ -2,6 +2,7 @@
 # Nordic PPK2 power profiler (source-meter mode) — DUT current draw + session-scoped supply.
 #
 #   ./ppk.sh info                     # identity + calibration (1st line is doctor-friendly)
+#   ./ppk.sh power [secs]             # rail up, no sampling (0/omitted = until Ctrl-C)
 #   ./ppk.sh avg [secs] [--power]     # mean/min/max current over secs (default 5)
 #   ./ppk.sh measure <secs> [-o f.csv] [--avg N] [--power] [--plot]  # CSV: t_s,current_uA,logic
 #   ./ppk.sh plot <f.csv> [-o f.png]  # envelope plot of a capture (no hardware needed)
